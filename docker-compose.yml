@@ -1,0 +1,34 @@
+services:
+  sql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "LocalDev_Passw0rd!"
+    ports:
+      - "1433:1433"
+
+  api:
+    build:
+      context: .
+      dockerfile: Team5.Api/Dockerfile
+    ports:
+      - "5001:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_HTTP_PORTS: "8080"
+      ConnectionStrings__DefaultConnection: "Server=sql;Database=Team5Db;User Id=sa;Password=LocalDev_Passw0rd!;TrustServerCertificate=True"
+    depends_on:
+      - sql
+
+  mvc:
+    build:
+      context: .
+      dockerfile: Team5.Mvc/Dockerfile
+    ports:
+      - "5000:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_HTTP_PORTS: "8080"
+      ApiSettings__BaseUrl: "http://api:8080"
+    depends_on:
+      - api

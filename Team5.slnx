@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="Team5.Api/Team5.Api.csproj" />
+  <Project Path="Team5.Mvc/Team5.Mvc.csproj" />
+</Solution>
